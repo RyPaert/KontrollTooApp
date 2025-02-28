@@ -15,13 +15,15 @@ public class SessionsController : Controller
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<Session>> GetSession(string? auditoriumname = null)
+    public ActionResult<IEnumerable<Session>> GetSession(Session? session, string? auditoriumname = null, DateTime? periodStart = null, DateTime? periodEnd = null)
     {
         var query = _context.Sessions!.AsQueryable();
-
         if (auditoriumname != null)
             query = query.Where(x => x.AuditoriumName != null && x.AuditoriumName.ToUpper().Contains(auditoriumname.ToUpper()));
-
+        if (periodStart != null && periodEnd != null)
+            query = query.Where(i => periodStart < i.StartTime && i.StartTime < periodEnd);
+        if (periodStart != null)
+            query = query.Where(i => periodStart <= i.StartTime);
         return query.ToList();
     }
 
@@ -54,8 +56,22 @@ public class SessionsController : Controller
     }
 
     [HttpPost]
-    public ActionResult<Session> PostSession(Session session)
+    public ActionResult<Session> PostSession(Session session, string? SeatNo = null)
     {
+        var query = _context.Tickets.AsQueryable();
+        if (SeatNo != null)
+        {
+            query = query.Where(x => x.SeatNo != null && x.SeatNo.ToUpper().Contains(SeatNo.ToUpper()));
+
+            return BadRequest();
+        }
+
+        var timeNow = DateTime.Now;
+        var startTime = session.StartTime;
+        if (timeNow > startTime)
+        {
+            return BadRequest();
+        }
         var dbSession = _context.Sessions!.Find(session.Id);
         if (dbSession == null)
         {

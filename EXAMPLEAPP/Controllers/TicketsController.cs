@@ -54,15 +54,25 @@ public class TicketsController : Controller
     }
 
     [HttpPost]
-    public ActionResult<Session> PostTicket(Ticket ticket)
+    public ActionResult<Ticket> PostTicket(Ticket ticket, string? SeatNo = null)
     {
+        var query = _context.Tickets.AsQueryable();
         var dbTicket = _context.Tickets!.Find(ticket.Id);
+        if (SeatNo != null)
+        {
+            query = query.Where(x => x.SeatNo != null && x.SeatNo.Equals(SeatNo));
+            return BadRequest();
+        }
         if (dbTicket == null)
         {
-            _context.Add(ticket);
-            _context.SaveChanges();
+            if (ticket.Price <= 0)
+            {
+                return BadRequest();              
+            }
+         _context.Add(ticket);
+        _context.SaveChanges();
 
-            return CreatedAtAction(nameof(GetTicket), new { Id = ticket.Id }, ticket);
+        return CreatedAtAction(nameof(GetTicket), new { Id = ticket.Id }, ticket);
         }
         else
         {
@@ -71,7 +81,7 @@ public class TicketsController : Controller
     }
 
     [HttpDelete("{id}")]
-    public IActionResult DeleteSession(int id)
+    public IActionResult DeleteTicket(int id)
     {
         var ticket = _context.Tickets!.Find(id);
         if (ticket == null)
