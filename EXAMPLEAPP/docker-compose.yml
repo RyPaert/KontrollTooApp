@@ -1,0 +1,21 @@
+services:
+  api:
+    build: .
+    ports:
+      - "5000:5000"
+    networks:
+      - test-network
+
+  newman:
+    image: postman/newman
+    depends_on:
+      - api
+    volumes:
+      - ./newman:/etc/newman
+    command: run "/etc/newman/test.postman_collection.json" -e "/etc/newman/test.postman_environment.json"
+    networks:
+      - test-network
+
+networks:
+  test-network:
+    driver: bridge

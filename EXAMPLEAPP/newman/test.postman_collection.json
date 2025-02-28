@@ -1,0 +1,1259 @@
+{
+	"info": {
+		"_postman_id": "6b47ed88-37c5-44bd-bfd2-18a2865da50c",
+		"name": "Näidiskontrolltöö Cinema",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Minimaalsed nõuded",
+			"item": [
+				{
+					"name": "Add Movie 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"pm.test(\"Movie1 data is correct\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.title).to.eql(\"Tom ja Jerry\");",
+									"    pm.environment.set(\"movie1Id\", jsonData.id); ",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"title\": \"Tom ja Jerry\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/api/movies",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"movies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Movie 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Movie1 data is correct\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.id).to.eql(pm.environment.get(\"movie1Id\"));",
+									"    pm.expect(jsonData.title).to.eql(\"Tom ja Jerry\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/movies/{{movie1Id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"movies",
+								"{{movie1Id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Movie 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"pm.test(\"Movie2 data is correct\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.title).to.eql(\"Godzilla vs. Kong\");",
+									"    pm.environment.set(\"movie2Id\", jsonData.id); ",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"title\": \"Godzilla vs. Kong\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/api/movies",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"movies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3. Add Old Session",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"movieId\": {{movie1Id}},\n\t\"auditoriumName\": \"Venus\",\n    \"startTime\": \"2025-01-05T10:00:00\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/api/sessions",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"sessions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Session 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"pm.test(\"Session1 data is correct\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.movieId).to.eql(pm.environment.get(\"movie1Id\"));",
+									"\tpm.expect(jsonData.auditoriumName).to.eql(\"Venus\");",
+									"\tpm.expect(jsonData.startTime.substring(0, 19)).to.eql(\"2025-11-08T10:00:00\");",
+									"\tpm.environment.set(\"session1Id\", jsonData.id); ",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"movieId\": {{movie1Id}},\n\t\"auditoriumName\": \"Venus\",\n    \"startTime\": \"2025-11-08T10:00:00\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/api/sessions",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"sessions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Session 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"pm.test(\"Session2 data is correct\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.movieId).to.eql(pm.environment.get(\"movie1Id\"));",
+									"\tpm.expect(jsonData.auditoriumName).to.eql(\"Venus\");",
+									"\tpm.expect(jsonData.startTime.substring(0, 19)).to.eql(\"2025-11-08T12:00:00\");",
+									"\tpm.environment.set(\"session2Id\", jsonData.id); ",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"movieId\": {{movie1Id}},\n\t\"auditoriumName\": \"Venus\",\n    \"startTime\": \"2025-11-08T12:00:00\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/api/sessions",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"sessions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Session 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Session2 data is correct\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.id).to.eql(pm.environment.get(\"session2Id\"));",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/sessions/{{session2Id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"sessions",
+								"{{session2Id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Session 3",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"pm.test(\"Session3 data is correct\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.movieId).to.eql(pm.environment.get(\"movie1Id\"));",
+									"\tpm.expect(jsonData.auditoriumName).to.eql(\"Venus\");",
+									"\tpm.expect(jsonData.startTime.substring(0, 19)).to.eql(\"2025-11-10T10:00:00\");",
+									"\tpm.environment.set(\"session3Id\", jsonData.id); ",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+              "raw": "{\n\t\"movieId\": {{movie1Id}},\n\t\"auditoriumName\": \"Venus\",\n    \"startTime\": \"2025-11-10T10:00:00\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/api/sessions",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"sessions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Session 4",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"pm.test(\"Session4 data is correct\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.movieId).to.eql(pm.environment.get(\"movie1Id\"));",
+									"\tpm.expect(jsonData.auditoriumName).to.eql(\"Venus\");",
+									"\tpm.expect(jsonData.startTime.substring(0, 19)).to.eql(\"2025-11-12T10:00:00\");",
+									"\tpm.environment.set(\"session4Id\", jsonData.id); ",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"movieId\": {{movie1Id}},\n\t\"auditoriumName\": \"Venus\",\n    \"startTime\": \"2025-11-12T10:00:00\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/api/sessions",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"sessions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Session 5",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"pm.test(\"Session5 data is correct\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.movieId).to.eql(pm.environment.get(\"movie2Id\"));",
+									"\tpm.expect(jsonData.auditoriumName).to.eql(\"Jupiter\");",
+									"\tpm.expect(jsonData.startTime.substring(0, 19)).to.eql(\"2025-11-08T10:00:00\");",
+									"\tpm.environment.set(\"session5Id\", jsonData.id); ",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"movieId\": {{movie2Id}},\n\t\"auditoriumName\": \"Jupiter\",\n    \"startTime\": \"2025-11-08T10:00:00\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/api/sessions",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"sessions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Session 6",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"pm.test(\"Session6 data is correct\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.movieId).to.eql(pm.environment.get(\"movie2Id\"));",
+									"\tpm.expect(jsonData.auditoriumName).to.eql(\"Jupiter\");",
+									"\tpm.expect(jsonData.startTime.substring(0, 19)).to.eql(\"2025-11-09T10:00:00\");",
+									"\tpm.environment.set(\"session6Id\", jsonData.id); ",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"movieId\": {{movie2Id}},\n\t\"auditoriumName\": \"Jupiter\",\n    \"startTime\": \"2025-11-09T10:00:00\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/api/sessions",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"sessions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Session 7",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"pm.test(\"Session7 data is correct\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.movieId).to.eql(pm.environment.get(\"movie2Id\"));",
+									"\tpm.expect(jsonData.auditoriumName).to.eql(\"Saturn\");",
+									"\tpm.expect(jsonData.startTime.substring(0, 19)).to.eql(\"2025-12-06T10:00:00\");",
+									"\tpm.environment.set(\"session7Id\", jsonData.id); ",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"movieId\": {{movie2Id}},\n\t\"auditoriumName\": \"Saturn\",\n    \"startTime\": \"2025-12-06T10:00:00\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/api/sessions",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"sessions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Session 7",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/sessions/{{session7Id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"sessions",
+								"{{session7Id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Session 7 again",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/sessions/{{session7Id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"sessions",
+								"{{session7Id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Sessions",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Sessions count is correct\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.length).to.eql(6);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/sessions",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"sessions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "4. Get Sessions by periodStart",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Sessions count is correct\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.length).to.eql(3);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/sessions?periodStart=2025-11-09",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"sessions"
+							],
+							"query": [
+								{
+									"key": "periodStart",
+									"value": "2025-11-09"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "4. Get Sessions by period",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Sessions count is correct\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.length).to.eql(2);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/sessions?periodStart=2025-11-09&periodEnd=2025-11-11",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"sessions"
+							],
+							"query": [
+								{
+									"key": "periodStart",
+									"value": "2025-11-09"
+								},
+								{
+									"key": "periodEnd",
+									"value": "2025-11-11"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "5. Add Ticket 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"pm.test(\"Ticket1 data is correct\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.sessionId).to.eql(pm.environment.get(\"session1Id\"));",
+									"\tpm.expect(jsonData.seatNo).to.eql(\"koht1\");",
+									"\tpm.expect(jsonData.price).to.eql(10.5);",
+									"\tpm.environment.set(\"ticket1Id\", jsonData.id); ",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"sessionId\": {{session1Id}},\n\t\"seatNo\": \"koht1\",\n    \"price\": 10.5\n}"
+						},
+						"url": {
+							"raw": "{{url}}/api/tickets",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"tickets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Ticket 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"pm.test(\"Ticket2 data is correct\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.sessionId).to.eql(pm.environment.get(\"session1Id\"));",
+									"\tpm.expect(jsonData.seatNo).to.eql(\"koht2\");",
+									"\tpm.expect(jsonData.price).to.eql(10.5);",
+									"\tpm.environment.set(\"ticket2Id\", jsonData.id); ",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"sessionId\": {{session1Id}},\n\t\"seatNo\": \"koht2\",\n    \"price\": 10.5\n}"
+						},
+						"url": {
+							"raw": "{{url}}/api/tickets",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"tickets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Ticket 3",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"pm.test(\"Ticket3 data is correct\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.sessionId).to.eql(pm.environment.get(\"session2Id\"));",
+									"\tpm.expect(jsonData.seatNo).to.eql(\"diivan\");",
+									"\tpm.expect(jsonData.price).to.eql(50);",
+									"\tpm.environment.set(\"ticket3Id\", jsonData.id); ",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"sessionId\": {{session2Id}},\n\t\"seatNo\": \"diivan\",\n    \"price\": 50\n}"
+						},
+						"url": {
+							"raw": "{{url}}/api/tickets",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"tickets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "6. Add Ticket (negative price)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"sessionId\": {{session2Id}},\n\t\"seatNo\": \"sofa\",\n    \"price\": -15\n}"
+						},
+						"url": {
+							"raw": "{{url}}/api/tickets",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"tickets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Ticket (duplicate seatNo)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"sessionId\": {{session1Id}},\n\t\"seatNo\": \"koht1\",\n    \"price\": 10\n}"
+						},
+						"url": {
+							"raw": "{{url}}/api/tickets",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"tickets"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Täiendavad nõuded",
+			"item": [
+				{
+					"name": "Add Ticket (unknown session)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"sessionId\": 100,\n\t\"seatNo\": \"koht1\",\n    \"price\": 10\n}"
+						},
+						"url": {
+							"raw": "{{url}}/api/tickets",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"tickets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Session (unknown session)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"movieId\": 200,\n\t\"auditoriumName\": \"Future\",\n    \"startTime\": \"2025-11-08T10:00:00\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/api/sessions",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"sessions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Sessions by movie title",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Sessions count is correct\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.length).to.eql(4);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/sessions?movieTitle=Tom ja Jerry",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"sessions"
+							],
+							"query": [
+								{
+									"key": "movieTitle",
+									"value": "Tom ja Jerry"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Sessions by movie title 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Sessions count is correct\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.length).to.eql(0);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/sessions?movieTitle=Tundmatu",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"sessions"
+							],
+							"query": [
+								{
+									"key": "movieTitle",
+									"value": "Tundmatu"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get SessionTickets",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Tickets count is correct\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.length).to.eql(2);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/sessions/{{session1Id}}/tickets",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"sessions",
+								"{{session1Id}}",
+								"tickets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get SessionTickets 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Tickets count is correct\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.length).to.eql(0);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/sessions/{{session6Id}}/tickets",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"sessions",
+								"{{session6Id}}",
+								"tickets"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
