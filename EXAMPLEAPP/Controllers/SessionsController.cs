@@ -98,6 +98,6 @@ public class SessionsController : Controller
         _context.Remove(session);
         _context.SaveChanges();
 
-        return NoContent();
+        return Ok();
     }
 }
