@@ -15,7 +15,7 @@ public class SessionsController : Controller
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<Session>> GetSession(Session? session, string? auditoriumname = null, DateTime? periodStart = null, DateTime? periodEnd = null)
+    public ActionResult<IEnumerable<Session>> GetSession(Session? session, string? auditoriumname = null, DateTime? periodStart = null, DateTime? periodEnd = null, string? movieTitle = null)
     {
         var query = _context.Sessions!.AsQueryable();
         if (auditoriumname != null)
@@ -24,6 +24,8 @@ public class SessionsController : Controller
             query = query.Where(i => periodStart < i.StartTime && i.StartTime < periodEnd);
         if (periodStart != null)
             query = query.Where(i => periodStart <= i.StartTime);
+        if (movieTitle != null)
+        query = query.Where(s => _context.Movies!.Any(m => m.Id == s.MovieId && m.Title == movieTitle));
         return query.ToList();
     }
 
