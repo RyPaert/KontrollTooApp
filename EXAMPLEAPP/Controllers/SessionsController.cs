@@ -59,6 +59,11 @@ public class SessionsController : Controller
     public ActionResult<Session> PostSession(Session session, string? SeatNo = null)
     {
         var query = _context.Tickets.AsQueryable();
+        var dbMovies = _context.Movies!.Find(session.MovieId);
+        if (dbMovies == null)
+        {
+            return BadRequest();
+        }
         if (SeatNo != null)
         {
             query = query.Where(x => x.SeatNo != null && x.SeatNo.ToUpper().Contains(SeatNo.ToUpper()));

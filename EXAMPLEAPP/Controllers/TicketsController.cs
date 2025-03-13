@@ -58,12 +58,17 @@ public class TicketsController : Controller
     {
         var query = _context.Tickets.AsQueryable();
         var dbTicket = _context.Tickets!.Find(ticket.Id);
+        var dbSession = _context.Sessions.Find(ticket.SessionId);
             query = query.Where(x => x.SessionId == ticket.SessionId && x.SeatNo.Equals(ticket.SeatNo));
             if (query.Count() > 0)
             {
                 return BadRequest();
             }
-        
+            if (dbSession == null)
+            {
+            return BadRequest();
+            }
+
         if (dbTicket == null)
         {
             if (ticket.Price <= 0)
