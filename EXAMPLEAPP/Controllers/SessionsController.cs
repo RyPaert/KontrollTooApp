@@ -29,6 +29,14 @@ public class SessionsController : Controller
         return query.ToList();
     }
 
+    [HttpGet("{id}/tickets")]
+    public ActionResult<IEnumerable<Ticket>> GetSessionTickets(int id)
+    {
+        var query = _context.Tickets.AsQueryable();
+        var test = _context.Sessions!.Find(id);
+        query = query.Where(x => x.SessionId == id);
+        return query.ToList();
+    }
     [HttpGet("{id}")]
     public ActionResult<TextReader> GetSession(int id)
     {
